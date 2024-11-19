@@ -1,19 +1,14 @@
 let gameState = "start"; // "start", "play", "end"
-
+let ballX = 300;
+let ballY = 100;
+let velocityY = 0;
+let acceleration = 0.1;
+let thrust = -0.2;
+let goalY = 540;
+let maxSafeVelocity = 2;
 
 function setup() {
     createCanvas(600, 550);
-  }
-  
-function draw() {
-    if (gameState === "start") {
-      drawStartScreen();
-    } else if (gameState === "play") {
-      background(37, 84, 6);
-      drawGame();
-    } else if (gameState === "end") {
-      drawEndScreen();
-    }
   }
   
 function drawStartScreen() {
@@ -23,6 +18,58 @@ function drawStartScreen() {
     text("FOOTBALL LANDER!", width / 2, height / 2);
     textSize(16);
     text("Press ENTER to Start", width / 2, height / 2 + 50);
+  }
+
+function drawGame() {
+    field();
+    ball(ballX, ballY);
+
+    //goal area
+    push();
+    noFill();
+    stroke(255, 255, 255);
+    strokeWeight(5);
+    rect(200, goalY, 200, 70);
+    pop();
+    
+    //ball mechanics
+    velocityY += acceleration;
+    ballY += velocityY;
+  
+    //boundary conditions (at the bottom)
+    if (ballY > height) {
+      ballY = height;
+      velocityY = 0;
+    }
+  
+    //winning or losing conditions (The following 10 lines are written with help of https://chatgpt.com/)
+    if (ballY > goalY && ballY < goalY + 10) {
+      if (abs(velocityY) <= maxSafeVelocity) {
+        gameState = "end";
+        gameResult = "win";
+      } else {
+        gameState = "end";
+        gameResult = "lose";
+      }
+    }
+  }
+
+function keyPressed() {
+    if (keyCode === ENTER) {
+      if (gameState === "start" || gameState === "end") {
+        //reset game
+        gameState = "play";
+        ballY = 50;
+        velocityY = 0;
+      }
+    }
+  }
+
+function keyIsDownHandler() {
+    //applying thrust when SPACE key is pressed during the game
+    if (keyIsDown(32) && gameState === "play") {
+      velocityY += thrust;
+    }
   }
 
 function drawEndScreen() {
