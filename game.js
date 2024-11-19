@@ -1,4 +1,56 @@
+let gameState = "start"; // "start", "play", "end"
 
+
+function setup() {
+    createCanvas(600, 550);
+  }
+  
+function draw() {
+    if (gameState === "start") {
+      drawStartScreen();
+    } else if (gameState === "play") {
+      background(37, 84, 6);
+      drawGame();
+    } else if (gameState === "end") {
+      drawEndScreen();
+    }
+  }
+  
+function drawStartScreen() {
+    fill(224, 203, 11);
+    textAlign(CENTER, CENTER);
+    textSize(45);
+    text("FOOTBALL LANDER!", width / 2, height / 2);
+    textSize(16);
+    text("Press ENTER to Start", width / 2, height / 2 + 50);
+  }
+
+function drawEndScreen() {
+    fill(224, 203, 11);
+    textAlign(CENTER, CENTER);
+    textSize(24);
+    if (gameResult === "win") {
+      text("GOAAAL!", width / 2, height / 2 - 20);
+    } else {
+      text("Too fast! Try again", width / 2, height / 2 - 20);
+    }
+    textSize(16);
+    text("Press ENTER to Restart", width / 2, height / 2 + 20);
+  }
+
+function draw() {
+    background(3, 52, 166);
+  if (gameState === "start") {
+    drawStartScreen();
+  } else if (gameState === "play") {
+    background(37, 84, 6);
+    keyIsDownHandler();
+    drawGame();
+  } else if (gameState === "end") {
+    drawEndScreen();
+  }
+}
+  
 function field(x,y){
     push();
     stroke(255, 255, 255);
@@ -33,7 +85,6 @@ function field(x,y){
     ellipse(300, 450, 10);
     pop();
 }
-
 
 function ball(x,y){
   // The ball
@@ -175,13 +226,4 @@ function ball(x,y){
   line(x-5, y+55, x-14, y+80); //down-side (left part)
   line(x+20, y+85, x+6, y+55); //down-side (right part)
   line(x-10, y+44, x+40, y+44); //right-side
-  }
-
-  let x = 200;
-  let y = 200;
-  
-  function draw(){
-      background(24, 84, 28);
-      field(100, 100);
-      ball(x+100, y);  
   }
